@@ -9,10 +9,17 @@ public class Player extends MovingIsoEntity {
     private boolean colisionado;
     private boolean ocupado;
 
-    public Player(double x, double y, double width, double height,double hitboxHeight) {
-        super(x, y, width, height, hitboxHeight);
-        state = StatePlayer.izquierda;
-        colisionado = false;
+    public Player(String name, double x, double y, double width, double height, double hitboxSize) {
+        super(name, x, y, width, height, hitboxSize);
+        state=StatePlayer.abajo;
+        colisionado=false;
+        ocupado=false;
+    }
+
+    public Player(String name, double x, double y, double width, double height, double hitboxX, double hitboxY, double hitboxWidth, double hitboxHeight) {
+        super(name, x, y, width, height, hitboxX, hitboxY, hitboxWidth, hitboxHeight);
+        state=StatePlayer.abajo;
+        colisionado=false;
         ocupado=false;
     }
 
@@ -44,10 +51,17 @@ public class Player extends MovingIsoEntity {
     @Override
     public void move() {
 
-        setX(getX() + Main.getDx());
-        setY(getY() + Main.getDy());
-        setHitboxX(getHitboxX() + Main.getDx());
-        setHitboxY(getHitboxY() + Main.getDy());
+        if(getX()+Main.getDx()>800)
+        {
+
+        }
+        else
+        {
+            setX(getX() + Main.getDx());
+            setY(getY() + Main.getDy());
+            setHitboxX(getHitboxX() + Main.getDx());
+            setHitboxY(getHitboxY() + Main.getDy());
+        }
 
     }
 }

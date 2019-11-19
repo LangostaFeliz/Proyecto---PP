@@ -6,13 +6,15 @@ import java.io.Serializable;
 
 public abstract class Entity implements Serializable {
 
+
+    private String name;
     private double x;
     private double y;
     private double width;
     private double height;
 
-    public Entity(double x, double y, double width, double height) {
-
+    public Entity(String name,double x, double y, double width, double height) {
+        this.name=name;
         this.x = x;
         this.y = y;
         this.width = width;
@@ -49,6 +51,13 @@ public abstract class Entity implements Serializable {
 
     public void setHeight(double height) {
         this.height = height;
+    }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     /*
