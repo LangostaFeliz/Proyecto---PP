@@ -20,7 +20,19 @@ public final class ImageLoader {
     public final static Image spriteBoteAzul= new Image("file:resources//sprites//objeto//BoteAzul.png");
     public final static Image[][] arrayImage = new Image[4][4];
 
+    public static Image[] TILES;
+    public static final int GRASS_TILE = 0;
+    public static final int ROAD_TILE = 1;
+    public static final int DIRT_TILE = 2;
+    public static final int BRICK_TILE = 3;
+
     static {
+        TILES = new Image[5];
+        TILES[GRASS_TILE] = new Image("file:resources//sprites//tiles//grass.png");
+        TILES[ROAD_TILE] = new Image("file:resources//sprites//tiles//road.png");
+        TILES[DIRT_TILE] = new Image("file:resources//sprites//tiles//dirt.png");
+        TILES[BRICK_TILE] = new Image("file:resources//sprites//tiles//brick.png");
+
         double duracion=0.2;
 
         for(int i=0;i<4;i++)

@@ -2,6 +2,8 @@ package sample;
 
 import botones.Button;
 import controller.TouchControl;
+
+import display.Background;
 import entidades.Entity;
 import gameObjeto.ArrayBasura;
 import gameObjeto.Basura;
@@ -41,11 +43,12 @@ public class Main extends Application {
 
     private static ArrayBasura arrayBasura=new ArrayBasura();
     private static Player jugador = new Player("jugador",100,100,32,48,0.5);
-    private static Camion camion = new Camion("camion",100,200,200,100,0.6);
+    private static Camion camion = new Camion("camion",100,200,200,100,0.5);
     private static BoteAzul boteAzul= new BoteAzul("boteAzul",50,250,50,50,1);
     Iterator<Basura> array=arrayBasura.getArrayBasura().iterator();
     List<Basura> remove=new ArrayList();
     private ArrayList<Entity> arrayEntidad=new ArrayList<>();
+    private Background bg;
 
 
 
@@ -56,6 +59,7 @@ public class Main extends Application {
         initializeControls();
         initializeGroup();
 
+        bg = new Background();
         texto.setX(0);
         texto.setY(40);
         texto.setFont(Font.font("Verdana",30));
@@ -84,9 +88,6 @@ public class Main extends Application {
                 double t =(now-starNanoTime)/1000000000.0;
                 updateLogic();
                 updateGraphic(gc,t);
-
-
-
             }
         }.start();
 
@@ -98,10 +99,7 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-
-    /*
-        Define propiedades basicas del stage.
-     */
+//        Define propiedades basicas del stage.
     private void setupPrimaryStage(Stage primaryStage) {
         primaryStage.setAlwaysOnTop(true);
         primaryStage.centerOnScreen();
@@ -142,10 +140,10 @@ public class Main extends Application {
             boteAzul.move();
             arrayBasura.getArrayBasura().forEach(basura -> {
                 basura.move();
+                //collision de basura y jugador para agarra la basura
                 if (basura.collisionsWith(jugador.getX() + dx, jugador.getY() + dy, jugador.getWidth(), jugador.getHeight()) == 1) {
                     jugador.setColisionado(true);
                     basura.setCollision(true);
-
                 } else {
                     jugador.setColisionado(false);
                     basura.setCollision(false);
@@ -154,21 +152,24 @@ public class Main extends Application {
                 {   // si el camion esta chocando a una basura se agrega esa basura a la lista de elimina
                         remove.add(basura);
                 }
-                if(basura.collisionsWith(boteAzul.getX(),boteAzul.getY(),boteAzul.getWidth(),boteAzul.getHeight())==1)
-                {   // si el camion esta chocando a una basura se agrega esa basura a la lista de elimina
-                    remove.add(basura);
-                    camion.setGasolina(camion.getGasolina()+30);
-                    puntaje++;
+                //collision con para sacar puntaje
+                if(basura.isMoving())
+                {
+                    if (jugador.collisionsWith(boteAzul.getX(),boteAzul.getY(),boteAzul.getWidth(),boteAzul.getHeight())==1){
+                        remove.add(basura);
+                        camion.setGasolina(camion.getGasolina()+30);
+                        puntaje++;
+                        jugador.setOcupado(false);
+                    }
                 }
                 if(basura.collisionsWith(jugador.getHitboxX()+dx,jugador.getHitboxY()+dy,jugador.getHitboxWidth(),jugador.getHitboxHeight())==1)
                 {
-                    dx=0;
-                    dy=0;
+
+                    dx=0;dy=0;
                 }
 
             });
-
-            //
+            //collision de jugador con el
             if(camion.collisionsWith(jugador.getHitboxX()+dx,jugador.getHitboxY()+dy,jugador.getHitboxWidth(),jugador.getHitboxHeight())==1)
             {
                 dx=0;
@@ -181,7 +182,6 @@ public class Main extends Application {
                 arrayEntidad.removeAll(remove);
                 jugador.setOcupado(false);
             }
-
             //fin de juego
         }
         if(camion.getGasolina()<0)
@@ -216,6 +216,7 @@ public class Main extends Application {
     }
 
     private void initializeGroup() {
+
         //Aqui va la configuracion inicial del grupo
         grupo = new Group();
 
